@@ -16,7 +16,6 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath("org.springframework.cloud:spring-cloud-starter-eureka:${springCloudVersion}")
 	}
 }
 
@@ -34,11 +33,22 @@ targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+	 maven {
+        url 'http://maven.springframework.org/release'
+    }
 }
 
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-web','org.springframework.boot:spring-boot-starter-actuator','mysql:mysql-connector-java','org.apache.tomcat.embed:tomcat-embed-jasper'
-	,'javax.servlet:jstl','org.springframework.boot:spring-boot-starter-undertow','org.springframework.cloud:spring-cloud-starter-eureka','org.springframework.boot:spring-boot-starter-security','org.springframework.boot:spring-boot-starter-data-jpa')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+    // TODO: Added ver no on the three core starter deps to make the maven plugin to work
+    compile("org.springframework.boot:spring-boot-starter-web:${springBootVersion}") {
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    compile("org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}")
+    runtime('org.apache.derby:derby')
+    compile("org.springframework.cloud:spring-cloud-starter-hystrix:1.2.5.RELEASE")
+    compile("org.springframework.cloud:spring-cloud-starter-eureka:1.2.5.RELEASE")
+    testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
 }
